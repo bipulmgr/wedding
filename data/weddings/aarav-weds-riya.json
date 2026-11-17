@@ -1,0 +1,133 @@
+{
+  "slug": "aarav-weds-riya",
+  "theme": "himalaya",
+  "timezone": "Asia/Kathmandu",
+  "locale": "en-GB",
+  "couple": {
+    "partner1": {
+      "first": "Aarav",
+      "full": "Aarav Shrestha",
+      "parents": "Son of Rajendra and Sita Shrestha",
+      "bio": "Software engineer, weekend trekker and the one who always knows a shortcut that is not a shortcut.",
+      "photo": ""
+    },
+    "partner2": {
+      "first": "Riya",
+      "full": "Riya Karki",
+      "parents": "Daughter of Mohan and Gita Karki",
+      "bio": "Architect, collector of old Newari woodwork photos and the reason we arrive anywhere on time.",
+      "photo": ""
+    }
+  },
+  "date": "2027-02-13T10:00:00+05:45",
+  "dateNepali": "Falgun 2083 BS",
+  "city": "Kathmandu, Nepal",
+  "hashtag": "#AaravWedsRiya",
+  "invite": "Together with our families, we invite you to celebrate our wedding.",
+  "heroImage": "",
+  "story": [
+    {
+      "year": "2018",
+      "title": "A borrowed umbrella",
+      "text": "Monsoon, Jhamsikhel. One umbrella, two strangers, and a walk that took three times longer than it should have."
+    },
+    {
+      "year": "2020",
+      "title": "Poon Hill at sunrise",
+      "text": "Our first trek together. Riya planned every stop; Aarav forgot the tea. We still argue about whose idea it was."
+    },
+    {
+      "year": "2025",
+      "title": "The question",
+      "text": "Asked in Patan Durbar Square, under the window Riya had photographed a hundred times. She said yes before he finished."
+    },
+    {
+      "year": "2027",
+      "title": "The wedding",
+      "text": "Four days of family, food and dancing in Kathmandu. We would love for you to be there."
+    }
+  ],
+  "events": [
+    {
+      "name": "Mehendi & Sangeet",
+      "start": "2027-02-11T16:00:00+05:45",
+      "end": "2027-02-11T22:00:00+05:45",
+      "venue": "The Courtyard",
+      "address": "Jhamsikhel, Lalitpur",
+      "mapUrl": "https://www.google.com/maps/search/?api=1&query=Jhamsikhel+Lalitpur",
+      "dress": "Bright colours, comfortable shoes for dancing",
+      "note": "Henna artists from 4 PM. Music and dinner from 7 PM."
+    },
+    {
+      "name": "Haldi",
+      "start": "2027-02-12T09:00:00+05:45",
+      "end": "2027-02-12T12:00:00+05:45",
+      "venue": "Karki residence",
+      "address": "New Baneshwor, Kathmandu",
+      "mapUrl": "https://www.google.com/maps/search/?api=1&query=New+Baneshwor+Kathmandu",
+      "dress": "Yellow, and clothes you do not mind getting turmeric on",
+      "note": "Close family and friends. Brunch is served after."
+    },
+    {
+      "name": "Janti & Bibaha",
+      "start": "2027-02-13T10:00:00+05:45",
+      "end": "2027-02-13T17:00:00+05:45",
+      "venue": "Shanti Garden",
+      "address": "Bhaisepati, Lalitpur",
+      "mapUrl": "https://www.google.com/maps/search/?api=1&query=Bhaisepati+Lalitpur",
+      "dress": "Traditional: daura suruwal, sari, kurta or lehenga",
+      "note": "The janti procession leaves at 10 AM. Ceremony and lunch follow."
+    },
+    {
+      "name": "Reception",
+      "start": "2027-02-14T18:30:00+05:45",
+      "end": "2027-02-14T22:30:00+05:45",
+      "venue": "Grand Ballroom",
+      "address": "Durbar Marg, Kathmandu",
+      "mapUrl": "https://www.google.com/maps/search/?api=1&query=Durbar+Marg+Kathmandu",
+      "dress": "Formal or festive",
+      "note": "Dinner, speeches and a very long dance floor."
+    }
+  ],
+  "gallery": [
+    { "src": "", "caption": "Jhamsikhel, 2018", "ratio": "4/5" },
+    { "src": "", "caption": "Poon Hill, 2020", "ratio": "1/1" },
+    { "src": "", "caption": "Bhaktapur, 2022", "ratio": "3/4" },
+    { "src": "", "caption": "Pokhara, 2023", "ratio": "4/3" },
+    { "src": "", "caption": "Patan, 2025", "ratio": "4/5" },
+    { "src": "", "caption": "Engagement, 2025", "ratio": "1/1" }
+  ],
+  "faqs": [
+    {
+      "q": "Where should I stay?",
+      "a": "We have held rooms in Thamel and Durbar Marg at a family rate. Message us and we will send the booking details."
+    },
+    {
+      "q": "How do I get to the venues?",
+      "a": "Every venue is within 30 minutes of Thamel. On the wedding day a bus leaves Durbar Marg at 9:15 AM for the janti procession."
+    },
+    {
+      "q": "Can I bring a plus-one or children?",
+      "a": "Your invitation lists everyone we have planned for. If you need to change that, tell us in your RSVP."
+    },
+    {
+      "q": "What about gifts?",
+      "a": "Your presence is the gift. If you would like to give something, a card on the day is more than enough."
+    },
+    {
+      "q": "Is there anything for guests flying in?",
+      "a": "Nepal offers visa on arrival for most countries. Bring a passport photo and cash in USD for the fee."
+    },
+    {
+      "q": "Who do I call on the day?",
+      "a": "Call Sagar (Aarav's cousin) on +977 98XXXXXXXX for directions, rides or anything else."
+    }
+  ],
+  "rsvp": {
+    "deadline": "2027-01-20",
+    "endpoint": "",
+    "email": "",
+    "whatsapp": "9779800000000"
+  },
+  "footerNote": "With love from both families."
+}

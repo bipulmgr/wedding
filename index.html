@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>
+    // Works on <user>.github.io/<repo>/ and on a custom domain (served from "/").
+    (function () {
+      var seg = location.pathname.split('/')[1];
+      var base = location.hostname.endsWith('github.io') && seg ? '/' + seg + '/' : '/';
+      window.__BASE__ = base;
+      var b = document.createElement('base');
+      b.href = base;
+      document.head.appendChild(b);
+      // Restore a deep link that 404.html forwarded to us.
+      var q = new URLSearchParams(location.search);
+      if (q.has('route')) {
+        var route = q.get('route').replace(/^\/+/, '');
+        q.delete('route');
+        var rest = q.toString();
+        history.replaceState(null, '', base + route + (rest ? '?' + rest : '') + location.hash);
+      }
+    })();
+  </script>
+  <title>Wedding</title>
+  <meta name="description" content="Our wedding: dates, venues, story and RSVP.">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Wedding">
+  <meta property="og:description" content="Our wedding: dates, venues, story and RSVP.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/themes.css">
+  <link rel="stylesheet" href="assets/css/designs.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div id="app" aria-live="polite"><p class="boot">Loading…</p></div>
+  <noscript><p class="boot">This wedding website needs JavaScript turned on.</p></noscript>
+  <script src="assets/js/themes.js"></script>
+  <script src="assets/js/art.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

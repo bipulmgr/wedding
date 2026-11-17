@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting…</title>
+  <script>
+    // GitHub Pages serves this file for any unknown path (e.g. /aarav-weds-riya).
+    // Forward to the app shell with the path in ?route= so the SPA can render it.
+    (function () {
+      var seg = location.pathname.split('/')[1];
+      var base = location.hostname.endsWith('github.io') && seg ? '/' + seg + '/' : '/';
+      var route = location.pathname.slice(base.length);
+      var q = location.search ? '&' + location.search.slice(1) : '';
+      location.replace(base + '?route=' + encodeURIComponent(route) + q + location.hash);
+    })();
+  </script>
+</head>
+<body></body>
+</html>
