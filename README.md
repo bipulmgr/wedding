@@ -1,15 +1,20 @@
 # Wedding website
 
-A single-page wedding website with **10 designs**, built for GitHub Pages. It has no build step and no dependencies: plain HTML, CSS and JavaScript.
+A wedding website studio and invitation template, built for GitHub Pages with plain HTML, CSS and JavaScript.
+
+- `/wedding-websites` is the bilingual English / Nepali registration and design selection experience. The studio presents five featured designs.
+- Couples choose groom-first or bride-first name order. The app makes a matching `name-weds-name` page route and expires that invitation four days after its wedding date.
+- New registrations are currently stored in the visitor's browser `localStorage`. They are a front-end prototype and are not available to other visitors or devices.
+- A production service that creates public subdomains and expires pages for everyone needs a backend to save registrations, check slug availability, provision DNS or wildcard routing, and enforce expiry server-side. GitHub Pages alone cannot create those pages per user; the existing `/slug` sample routes are static files.
 
 - One JSON file per wedding, so the same site can host your own wedding and weddings you make for clients.
 - Clean links such as `/aarav-weds-riya`, like a hosted wedding platform.
 - Sections: hero with countdown, couple and story timeline, events with directions and **Add to calendar** (.ics), photos with lightbox, FAQ, and RSVP.
 - RSVP goes to a form endpoint (Formspree or Google Sheets), WhatsApp or email. You choose which.
-- A design switcher, plus a `/designs` page that shows all ten side by side.
+- A design switcher, plus a `/designs` page that shows the five featured designs side by side.
 - Responsive down to phone size, keyboard accessible, and respects reduced motion.
 
-## The ten designs
+## The five featured designs
 
 | `theme` | Look |
 | --- | --- |
@@ -17,22 +22,17 @@ A single-page wedding website with **10 designs**, built for GitHub Pages. It ha
 | `dhaka` | Red, black and mustard dhaka topi textile. Bold and Nepali. |
 | `sayapatri` | Marigold toran on deep leaf green. Festive. |
 | `sindoor` | Vermilion and gold with शुभ विवाह. Ceremonial. |
-| `bare` | Huge grotesk type on white. Modern and plain. |
 | `botanical` | Sage and blush with an arched garden window. Romantic. |
-| `diyo` | Oil lamps on a Tihar night. Evening and reception. |
-| `kraft` | Letterpress invitation card on kraft paper. Formal. |
-| `durbar` | Carved Newari window in brass and wood. Heritage. |
-| `cover` | Magazine cover. Playful and editorial. |
 
-You can preview any design on any wedding by adding `?theme=<name>`, for example `/aarav-weds-riya?theme=durbar`.
+You can preview any design on any wedding by adding `?theme=<name>`, for example `/aarav-weds-riya?theme=botanical`.
 
 ## Make it yours
 
 1. Copy `data/weddings/aarav-weds-riya.json` to `data/weddings/<your-slug>.json`, for example `bipul-weds-<name>.json`.
 2. Edit names, dates, events, story, FAQ and RSVP settings. Write dates with the Nepal offset, for example `2027-02-13T10:00:00+05:45`.
-3. Set `"theme"` to one of the ten names.
+3. Set `"theme"` to one of the five names.
 4. In `data/site.json`, set `defaultWedding` to your slug so it opens at the root of your domain.
-5. Put photos in `assets/photos/` and reference them as `"src": "assets/photos/01.jpg"`. Gallery items with an empty `src` show a patterned placeholder. `heroImage` (used by Botanical and Cover) and each person's `photo` work the same way.
+5. Put photos in `assets/photos/` and reference them as `"src": "assets/photos/01.jpg"`. Gallery items with an empty `src` show a patterned placeholder. `heroImage` and each person's `photo` work the same way.
 6. When you go live, set `"allowThemeSwitch": false` in `data/site.json` to hide the design switcher from guests.
 
 ### More weddings (official / client use)
@@ -84,7 +84,7 @@ index.html            app shell
 data/site.json        default wedding and switcher setting
 data/weddings/*.json  one file per wedding
 assets/css/base.css   shared layout
-assets/css/themes.css the ten designs
+assets/css/themes.css the five featured designs
 assets/css/designs.css the /designs showroom
 assets/js/themes.js   design list (names, fonts, swatches)
 assets/js/art.js      SVG artwork drawn in code (flags, toran, diyas, branch, mountains)

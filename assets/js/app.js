@@ -15,6 +15,7 @@
   };
   var byId = function (id) { return THEMES.find(function (t) { return t.id === id; }); };
   var params = function () { return new URLSearchParams(location.search); };
+  function tr(en, ne) { return state.wedding && state.wedding.language === 'ne' ? ne : en; }
 
   function fmt(iso, opts, w) {
     return new Intl.DateTimeFormat((w && w.locale) || 'en-GB', Object.assign({ timeZone: (w && w.timezone) || 'Asia/Kathmandu' }, opts)).format(new Date(iso));
@@ -58,6 +59,7 @@
     var path = decodeURIComponent(location.pathname.slice(BASE.length)).replace(/^\/+|\/+$/g, '');
     clearInterval(state.timer);
     if (path === 'designs') return renderDesigns();
+    if (path === 'wedding-websites' || !path) return renderStudio();
     return renderWedding(path || state.site.defaultWedding);
   }
 
@@ -81,14 +83,14 @@
   function countdownHTML(w) {
     return '<dl class="countdown" data-countdown="' + esc(w.date) + '">' +
       ['days', 'hours', 'minutes', 'seconds'].map(function (u) {
-        return '<div><dt>' + u + '</dt><dd data-u="' + u + '">–</dd></div>';
+        return '<div><dt>' + (w.language === 'ne' ? { days: 'दिन', hours: 'घण्टा', minutes: 'मिनेट', seconds: 'सेकेन्ड' }[u] : u) + '</dt><dd data-u="' + u + '">–</dd></div>';
       }).join('') + '</dl>';
   }
 
   function ctaHTML(w) {
     var by = w.rsvp && w.rsvp.deadline ? ' by ' + fmt(w.rsvp.deadline + 'T12:00:00Z', { day: 'numeric', month: 'short' }, w) : '';
-    return '<div class="hero__cta"><a class="btn btn--solid" href="#rsvp">RSVP' + esc(by) + '</a>' +
-      '<a class="btn btn--ghost" href="#events">See the events</a></div>';
+    return '<div class="hero__cta"><a class="btn btn--solid" href="#rsvp">' + tr('RSVP', 'उपस्थिति जनाउनुहोस्') + esc(by) + '</a>' +
+      '<a class="btn btn--ghost" href="#events">' + tr('See the events', 'कार्यक्रम हेर्नुहोस्') + '</a></div>';
   }
 
   function heroHTML(w, t) {
@@ -191,13 +193,13 @@
 
   function navHTML(w) {
     var n = names(w);
-    var links = [['story', 'Our story'], ['events', 'Events'], ['gallery', 'Photos'], ['faq', 'Good to know']];
+    var links = [['story', tr('Our story', 'हाम्रो कथा')], ['events', tr('Events', 'कार्यक्रम')], ['gallery', tr('Photos', 'तस्बिरहरू')], ['faq', tr('Good to know', 'जानकारी')]];
     return '<header class="nav"><div class="nav__inner wrap">' +
       '<a class="nav__mark display" href="#top">' + esc(n.a[0]) + '<span aria-hidden="true">&amp;</span><span class="sr">and</span>' + esc(n.b[0]) + '</a>' +
       '<button class="nav__toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>' +
       '<nav aria-label="Sections"><ul class="nav__links" id="nav-links">' +
       links.map(function (l) { return '<li><a href="#' + l[0] + '">' + l[1] + '</a></li>'; }).join('') +
-      '<li><a class="btn btn--solid btn--sm" href="#rsvp">RSVP</a></li></ul></nav></div></header>';
+      '<li><a class="btn btn--solid btn--sm" href="#rsvp">' + tr('RSVP', 'उपस्थिति') + '</a></li></ul></nav></div></header>';
   }
 
   function coupleHTML(w) {
@@ -212,8 +214,8 @@
 
   function storyHTML(w) {
     return '<section class="section" id="story"><div class="wrap">' +
-      '<div class="section__head"><h2 class="section__title display">Our story</h2>' +
-      '<p class="section__lede">Two families, one umbrella and a lot of walking.</p></div>' +
+      '<div class="section__head"><h2 class="section__title display">' + tr('Our story', 'हाम्रो कथा') + '</h2>' +
+      '<p class="section__lede">' + tr('Two families, one story, a lifetime together.', 'दुई परिवार, एउटै कथा, जीवनभरको साथ।') + '</p></div>' +
       coupleHTML(w) +
       '<ol class="story">' + w.story.map(function (s) {
         return '<li class="story__item"><p class="story__year display">' + esc(s.year) + '</p><div><h3 class="story__title">' + esc(s.title) + '</h3><p>' + esc(s.text) + '</p></div></li>';
@@ -222,8 +224,8 @@
 
   function eventsHTML(w) {
     return '<section class="section section--alt" id="events"><div class="wrap">' +
-      '<div class="section__head"><h2 class="section__title display">Events</h2>' +
-      '<p class="section__lede">All times are Nepal time. Tap a venue for directions or save an event to your calendar.</p></div>' +
+      '<div class="section__head"><h2 class="section__title display">' + tr('Events', 'कार्यक्रम') + '</h2>' +
+      '<p class="section__lede">' + tr('All times are Nepal time. Tap a venue for directions or save an event to your calendar.', 'सबै समय नेपाल समयअनुसार हुन्। स्थानको नक्सा हेर्नुहोस् वा पात्रोमा राख्नुहोस्।') + '</p></div>' +
       '<ol class="events">' + w.events.map(function (e, i) {
         return '<li class="event">' +
           '<p class="event__when"><span class="event__day display">' + esc(fmt(e.start, { day: 'numeric' }, w)) + '</span>' +
@@ -243,8 +245,8 @@
   function galleryHTML(w) {
     if (!w.gallery || !w.gallery.length) return '';
     return '<section class="section" id="gallery"><div class="wrap">' +
-      '<div class="section__head"><h2 class="section__title display">Photos</h2>' +
-      '<p class="section__lede">A few places we have been. Bring your camera; there will be more.</p></div>' +
+      '<div class="section__head"><h2 class="section__title display">' + tr('Photos', 'तस्बिरहरू') + '</h2>' +
+      '<p class="section__lede">' + tr('A few moments from our story.', 'हाम्रो कथाका केही सुन्दर क्षणहरू।') + '</p></div>' +
       '<div class="gallery">' + w.gallery.map(function (g, i) {
         var ratio = esc(g.ratio || '4/5');
         if (!g.src) {
@@ -258,8 +260,8 @@
   function faqHTML(w) {
     if (!w.faqs || !w.faqs.length) return '';
     return '<section class="section section--alt" id="faq"><div class="wrap">' +
-      '<div class="section__head"><h2 class="section__title display">Good to know</h2>' +
-      '<p class="section__lede">Travel, stays and the questions everyone asks.</p></div>' +
+      '<div class="section__head"><h2 class="section__title display">' + tr('Good to know', 'जानकारी') + '</h2>' +
+      '<p class="section__lede">' + tr('Travel, stays and the questions everyone asks.', 'यात्रा, बसाइँ र पाहुनाले सोध्ने सामान्य प्रश्नहरू।') + '</p></div>' +
       '<div class="faq">' + w.faqs.map(function (f) {
         return '<details><summary>' + esc(f.q) + '</summary><p>' + esc(f.a) + '</p></details>';
       }).join('') + '</div></div></section>';
@@ -267,23 +269,24 @@
 
   function rsvpHTML(w) {
     var dl = w.rsvp && w.rsvp.deadline ? fmt(w.rsvp.deadline + 'T12:00:00Z', { day: 'numeric', month: 'long', year: 'numeric' }, w) : '';
+    var copy = w.language === 'ne' ? {name:'तपाईंको नाम',contact:'फोन वा इमेल',will:'तपाईं आउनुहुन्छ?',yes:'आउँछु',no:'माफ गर्नुहोस्, आउन सक्दिनँ',guests:'पाहुनाको संख्या',events:'कुन कार्यक्रममा?',message:'जोडीका लागि सन्देश',send:'जवाफ पठाउनुहोस्'} : {name:'Your name',contact:'Phone or email',will:'Will you come?',yes:'Yes, I will be there',no:'Sorry, I cannot',guests:'Number of guests, including you',events:'Which events?',message:'Message for the couple',send:'Send RSVP'};
     return '<section class="section" id="rsvp"><div class="wrap rsvp">' +
-      '<div class="section__head"><h2 class="section__title display">RSVP</h2>' +
-      '<p class="section__lede">' + (dl ? 'Please reply by ' + esc(dl) + ' so we can plan seats and food.' : 'Please let us know if you can come.') + '</p>' +
+      '<div class="section__head"><h2 class="section__title display">' + tr('RSVP', 'उपस्थिति') + '</h2>' +
+      '<p class="section__lede">' + (dl ? tr('Please reply by ', 'कृपया ') + esc(dl) + tr(' so we can plan seats and food.', ' भित्र जवाफ दिनुहोस्।') : tr('Please let us know if you can come.', 'तपाईं आउन सक्नुहुन्छ कि सक्नुहुन्न, जानकारी दिनुहोस्।')) + '</p>' +
       (w.hashtag ? '<p class="rsvp__tag">Share photos with <strong>' + esc(w.hashtag) + '</strong></p>' : '') + '</div>' +
       '<form class="form" novalidate>' +
-      '<div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required></div>' +
-      '<div class="field"><label for="f-contact">Phone or email</label><input id="f-contact" name="contact" autocomplete="tel" required></div>' +
-      '<fieldset class="field"><legend>Will you come?</legend><div class="choices">' +
-      '<label class="choice"><input type="radio" name="attending" value="Yes" required checked><span>Yes, I will be there</span></label>' +
-      '<label class="choice"><input type="radio" name="attending" value="No"><span>Sorry, I cannot</span></label></div></fieldset>' +
-      '<div class="field field--guests"><label for="f-guests">Number of guests, including you</label><input id="f-guests" name="guests" type="number" min="1" max="10" value="1" inputmode="numeric"></div>' +
-      '<fieldset class="field field--events"><legend>Which events?</legend><div class="choices">' +
+      '<div class="field"><label for="f-name">' + copy.name + '</label><input id="f-name" name="name" autocomplete="name" required></div>' +
+      '<div class="field"><label for="f-contact">' + copy.contact + '</label><input id="f-contact" name="contact" autocomplete="tel" required></div>' +
+      '<fieldset class="field"><legend>' + copy.will + '</legend><div class="choices">' +
+      '<label class="choice"><input type="radio" name="attending" value="Yes" required checked><span>' + copy.yes + '</span></label>' +
+      '<label class="choice"><input type="radio" name="attending" value="No"><span>' + copy.no + '</span></label></div></fieldset>' +
+      '<div class="field field--guests"><label for="f-guests">' + copy.guests + '</label><input id="f-guests" name="guests" type="number" min="1" max="10" value="1" inputmode="numeric"></div>' +
+      '<fieldset class="field field--events"><legend>' + copy.events + '</legend><div class="choices">' +
       w.events.map(function (e) {
         return '<label class="choice"><input type="checkbox" name="events" value="' + esc(e.name) + '" checked><span>' + esc(e.name) + '</span></label>';
       }).join('') + '</div></fieldset>' +
-      '<div class="field"><label for="f-msg">Message for the couple <span class="opt">(optional)</span></label><textarea id="f-msg" name="message" rows="3"></textarea></div>' +
-      '<button class="btn btn--solid btn--wide" type="submit">Send RSVP</button>' +
+      '<div class="field"><label for="f-msg">' + copy.message + ' <span class="opt">(' + tr('optional', 'ऐच्छिक') + ')</span></label><textarea id="f-msg" name="message" rows="3"></textarea></div>' +
+      '<button class="btn btn--solid btn--wide" type="submit">' + copy.send + '</button>' +
       '<p class="form__status" role="status"></p></form></div></section>';
   }
 
@@ -293,7 +296,7 @@
       '<p class="footer__names display">' + esc(n.a) + ' &amp; ' + esc(n.b) + '</p>' +
       '<p>' + esc(longDate(w.date, w)) + '<br>' + esc(w.city) + '</p>' +
       (w.footerNote ? '<p>' + esc(w.footerNote) + '</p>' : '') +
-      (allowSwitch ? '<p><a href="designs" data-link>Browse all ten designs</a></p>' : '') +
+      (allowSwitch ? '<p><a href="designs" data-link>Browse all five designs</a></p>' : '') +
       '</div></footer>';
   }
 
@@ -311,10 +314,14 @@
   function renderWedding(slug) {
     var p = params();
     var embed = p.has('embed');
-    var load = state.wedding && state.wedding.slug === slug ? Promise.resolve(state.wedding) : getJSON('data/weddings/' + slug + '.json');
+    var saved = savedWeddings();
+    var local = saved.find(function (item) { return item.slug === slug; });
+    var load = local ? Promise.resolve(local) : (state.wedding && state.wedding.slug === slug ? Promise.resolve(state.wedding) : getJSON('data/weddings/' + slug + '.json'));
     return load.then(function (w) {
       w.slug = w.slug || slug;
+      if (w.expiresAt && Date.now() > new Date(w.expiresAt).getTime()) return renderExpired(w);
       state.wedding = w;
+      document.documentElement.lang = w.language === 'ne' ? 'ne' : 'en';
       var t = byId(p.get('theme')) || byId(w.theme) || THEMES[0];
       state.theme = t;
       loadFonts(t);
@@ -323,7 +330,7 @@
       var n = names(w);
       setMeta(n.a + ' & ' + n.b + ' are getting married', w.invite + ' ' + longDate(w.date, w) + ', ' + w.city + '.', t.themeColor);
       var allowSwitch = state.site.allowThemeSwitch !== false;
-      app.innerHTML = navHTML(w) + '<main id="main">' + heroHTML(w, t) + storyHTML(w) + eventsHTML(w) + galleryHTML(w) + faqHTML(w) + rsvpHTML(w) + '</main>' +
+      app.innerHTML = navHTML(w) + '<main id="main">' + heroHTML(w, t) + (w.story && w.story.length ? storyHTML(w) : '') + (w.events && w.events.length ? eventsHTML(w) : '') + galleryHTML(w) + faqHTML(w) + rsvpHTML(w) + '</main>' +
         footerHTML(w, allowSwitch && !embed) + (allowSwitch && !embed ? switcherHTML(t, slug) : '') +
         '<dialog class="lightbox" aria-label="Photo"><button class="lightbox__close" type="button">Close</button><img alt=""><p></p></dialog>';
       startCountdown(w);
@@ -337,6 +344,29 @@
       renderMissing(slug);
     });
   }
+
+  function savedWeddings() { try { return JSON.parse(localStorage.getItem('niuto:weddings') || '[]'); } catch (e) { return []; } }
+
+  var copy = {
+    en: {nav:'Wedding websites', sub:'MADE FOR YOUR DAY', title:'Your wedding,\nyour own little corner of the internet.', intro:'A beautiful place for every detail, every guest, and the days you will remember.', cta:'Create your wedding website', browse:'Explore five signature designs', showcase:'A page that feels like the two of you.', showcaseText:'Share the date, the places, the little story, and everything your guests need to know.', choose:'Five ways to say “we do.”', chooseText:'Choose an atmosphere. Make it yours with your names, celebrations, photos, and language.', start:'Start with the essentials', steps:'Tell us the date and details. Pick your design and language. Your invitation page is ready to share.', groom:'Groom’s name', bride:'Bride’s name', order:'Name order', gfirst:'Groom first', bfirst:'Bride first', weddingDate:'Wedding date', city:'City / venue area', language:'Guest language', design:'Choose a design', create:'Create my page', back:'Back to designs', link:'Your page link', expires:'Available through four days after your wedding.', themeNames:['Himalaya','Dhaka','Sayapatri','Sindoor','Botanical'], themeDesc:['Quiet mountain air and soft blue skies.','Woven tradition in confident vermilion.','Marigold garlands and a garden celebration.','A timeless ceremony in vermilion and gold.','A modern garden party in sage and blush.'], exists:'That page name is already taken. Try a different name combination.', required:'Add both names and your wedding date to continue.', expired:'This wedding page has reached the end of its celebration.', expiredText:'This invitation was available through four days after the wedding.', home:'Create a wedding page', success:'Your page is ready to share.' },
+    ne: {nav:'विवाह वेबसाइट', sub:'तपाईंको विशेष दिनका लागि', title:'तपाईंको विवाह,\nतपाईंको आफ्नै सुन्दर पाना।', intro:'मिति, निमन्त्रणा, कार्यक्रम र सम्झनाहरू राख्ने एक सुन्दर ठाउँ।', cta:'विवाह वेबसाइट बनाउनुहोस्', browse:'पाँच आकर्षक डिजाइन हेर्नुहोस्', showcase:'तपाईं दुवैको कथा सुनाउने पाना।', showcaseText:'मिति, स्थान, प्रेम कथा र पाहुनालाई चाहिने सबै जानकारी साझा गर्नुहोस्।', choose:'“शुभ विवाह” का पाँच शैली।', chooseText:'आफ्नो मनपर्ने शैली छान्नुहोस्। नाम, कार्यक्रम, फोटो र भाषासँग आफ्नो बनाउनुहोस्।', start:'आवश्यक जानकारीबाट सुरु गर्नुहोस्', steps:'मिति र विवरण भर्नुहोस्। डिजाइन र भाषा छान्नुहोस्। निमन्त्रणा साझा गर्न तयार हुन्छ।', groom:'दुलहाको नाम', bride:'दुलहीको नाम', order:'नामको क्रम', gfirst:'पहिले दुलहा', bfirst:'पहिले दुलही', weddingDate:'विवाह मिति', city:'सहर / कार्यक्रम स्थल', language:'पाहुनाको भाषा', design:'डिजाइन छान्नुहोस्', create:'मेरो पाना बनाउनुहोस्', back:'डिजाइनहरू हेर्नुहोस्', link:'तपाईंको पेज लिङ्क', expires:'विवाहको चार दिनपछि सम्म उपलब्ध।', themeNames:['हिमालय','ढाका','सयपत्री','सिन्दूर','बोटानिकल'], themeDesc:['शान्त हिमाल र नीलो आकाशको कोमलता।','विश्वासिलो रातो रङमा बुनेको परम्परा।','सयपत्रीको माला र बगैँचाको उत्सव।','रातो र सुनौलो रङको कालातीत समारोह।','सेज र गुलाबी रङको आधुनिक बगैँचा।'], exists:'यो पेज नाम पहिल्यै प्रयोग भएको छ। अर्को नाम संयोजन प्रयास गर्नुहोस्।', required:'अगाडि बढ्न दुवै नाम र विवाह मिति भर्नुहोस्।', expired:'यो विवाह पेजको अवधि समाप्त भएको छ।', expiredText:'यो निमन्त्रणा विवाहको चार दिनपछि सम्म उपलब्ध थियो।', home:'विवाह पेज बनाउनुहोस्', success:'तपाईंको पेज साझा गर्न तयार छ।' }
+  };
+  var signupThemes = ['himalaya','dhaka','sayapatri','sindoor','botanical'];
+  function renderStudio() {
+    var lang = params().get('lang') === 'ne' ? 'ne' : 'en', c = copy[lang];
+    document.documentElement.lang = lang === 'ne' ? 'ne' : 'en';
+    document.documentElement.setAttribute('data-theme','studio'); document.body.className = '';
+    var font = document.getElementById('theme-fonts'); if (font) font.remove();
+    setMeta('Wedding websites | Niuto', 'Create a beautiful bilingual wedding invitation website.', '#f8f5ef');
+    app.innerHTML = '<main class="product"><header class="product__nav"><a href="wedding-websites" data-link class="product__brand">NIUTO<span>WEDDINGS</span></a><a href="wedding-websites?lang='+(lang==='en'?'ne':'en')+'" data-link class="product__lang">'+(lang==='en'?'नेपाली':'English')+'</a></header>'+
+      '<section class="product__hero"><div class="product__heroCopy"><p class="eyebrow">'+c.sub+'</p><h1>'+c.title.replace('\n','<br>')+'</h1><p>'+c.intro+'</p><a class="product__cta" href="#create">'+c.cta+' <span>↗</span></a><a class="product__textLink" href="#designs">'+c.browse+' ↓</a></div><div class="product__art"><div class="art-sun"></div><div class="art-frame"><span>शुभ विवाह</span><strong>A <i>&amp;</i> R</strong><small>13 FEBRUARY · KATHMANDU</small></div><span class="art-leaf leaf-one">✿</span><span class="art-leaf leaf-two">✿</span></div></section>'+
+      '<section class="product__intro"><p class="eyebrow">A NEW WAY TO INVITE</p><h2>'+c.showcase+'</h2><p>'+c.showcaseText+'</p></section>'+
+      '<section class="product__designs" id="designs"><div class="product__sectionHead"><div><p class="eyebrow">FIVE SIGNATURE DESIGNS</p><h2>'+c.choose+'</h2></div><p>'+c.chooseText+'</p></div><div class="design-list">'+signupThemes.map(function(id,i){var t=byId(id);return '<article class="design-preview design-preview--'+id+'"><div class="preview-art"><span>'+c.themeNames[i]+'</span><strong>Aarav <i>&amp;</i> Riya</strong><small>13 · 02 · 2027</small></div><div class="preview-meta"><span>0'+(i+1)+'</span><p><strong>'+c.themeNames[i]+'</strong><small>'+c.themeDesc[i]+'</small></p></div></article>';}).join('')+'</div></section>'+
+      '<section class="product__create" id="create"><div class="create-copy"><p class="eyebrow">YOUR STORY STARTS HERE</p><h2>'+c.start+'</h2><p>'+c.steps+'</p><div class="create-note">✦ &nbsp;'+c.expires+'</div></div><form class="create-form" id="create-form"><div class="name-fields"><label>'+c.groom+'<input name="groom" required autocomplete="given-name" placeholder="Aarav"></label><label>'+c.bride+'<input name="bride" required placeholder="Riya"></label></div><label>'+c.order+'<select name="order"><option value="groom">'+c.gfirst+'</option><option value="bride">'+c.bfirst+'</option></select></label><label>'+c.weddingDate+'<input type="date" name="date" required></label><label>'+c.city+'<input name="city" placeholder="Kathmandu, Nepal"></label><div class="form-row"><label>'+c.language+'<select name="language"><option value="en">English</option><option value="ne">नेपाली</option></select></label><label>'+c.design+'<select name="theme">'+signupThemes.map(function(id,i){return '<option value="'+id+'">'+c.themeNames[i]+'</option>';}).join('')+'</select></label></div><button class="product__cta" type="submit">'+c.create+' <span>↗</span></button><p class="create-status" role="status"></p></form></section><footer class="product__footer"><a href="wedding-websites" data-link>NIUTO WEDDINGS</a><span>Made with love in Nepal</span></footer></main>';
+    document.getElementById('create-form').addEventListener('submit',function(e){e.preventDefault();var f=e.currentTarget,d=new FormData(f),g=String(d.get('groom')).trim(),b=String(d.get('bride')).trim(),date=String(d.get('date'));var status=f.querySelector('.create-status');if(!g||!b||!date){status.textContent=c.required;return;}var left=d.get('order')==='groom'?g:b,right=d.get('order')==='groom'?b:g,slug=slugPart(left)+'-weds-'+slugPart(right),saved=savedWeddings();if(saved.some(function(w){return w.slug===slug;})){status.textContent=c.exists;return;}var end=new Date(date+'T23:59:59+05:45');end.setTime(end.getTime()+4*86400000);var wedding={slug:slug,theme:d.get('theme'),language:d.get('language'),timezone:'Asia/Kathmandu',locale:d.get('language')==='ne'?'ne-NP':'en-GB',date:date+'T10:00:00+05:45',expiresAt:end.toISOString(),couple:{partner1:{first:left,full:left},partner2:{first:right,full:right}},city:String(d.get('city')||'Nepal'),invite:d.get('language')==='ne'?'हाम्रो विवाह समारोहमा सहभागी भई शुभकामना दिनुहुन हार्दिक निमन्त्रणा गर्दछौँ।':'Together with our families, we invite you to celebrate our wedding.',story:[],events:[],gallery:[],faqs:[],rsvp:{},footerNote:d.get('language')==='ne'?'दुवै परिवारको तर्फबाट माया सहित।':'With love from both families.'};saved.push(wedding);localStorage.setItem('niuto:weddings',JSON.stringify(saved));go(slug);});
+  }
+  function slugPart(s){return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'couple';}
+  function renderExpired(w){document.documentElement.setAttribute('data-theme',w.theme||'bare');loadFonts(byId(w.theme||'bare'));setMeta('Celebration complete','This wedding page has expired.');app.innerHTML='<main class="expired"><p class="eyebrow">'+esc(w.couple.partner1.first)+' &amp; '+esc(w.couple.partner2.first)+'</p><h1>Thank you for celebrating with us.</h1><p>This invitation has reached the end of its celebration.</p><a href="wedding-websites" data-link>Niuto Weddings</a></main>';}
 
   function renderMissing(slug) {
     document.documentElement.setAttribute('data-theme', 'bare');
@@ -501,11 +531,11 @@
     document.body.className = '';
     var link = document.getElementById('theme-fonts');
     if (link) link.remove();
-    setMeta('Ten wedding website designs', 'Ten designs for a Nepali wedding website. Pick one and make it yours.', '#fafaf9');
+    setMeta('Five wedding website designs', 'Five designs for a Nepali wedding website. Pick one and make it yours.', '#fafaf9');
     var slug = state.site.defaultWedding;
     app.innerHTML = '<main id="main" class="studio">' +
       '<header class="studio__head wrap"><a class="studio__back" href="./" data-link>Back to the wedding</a>' +
-      '<h1>Ten designs for one wedding</h1>' +
+      '<h1>Five designs for one wedding</h1>' +
       '<p>Each design below is the same wedding website with the same details. Open one to see it full size, then set its name as <code>"theme"</code> in your wedding file.</p></header>' +
       '<ul class="studio__grid wrap">' + THEMES.map(function (t) {
         var url = slug + '?theme=' + t.id;

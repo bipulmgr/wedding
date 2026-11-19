@@ -1,4 +1,4 @@
-/* The ten designs. `fonts` is a Google Fonts css2 family query. `swatch` feeds the switcher. */
+/* Five signature designs. `fonts` is a Google Fonts css2 family query. `swatch` feeds the switcher. */
 window.THEMES = [
   {
     id: 'himalaya',
@@ -33,14 +33,6 @@ window.THEMES = [
     themeColor: '#8e1414'
   },
   {
-    id: 'bare',
-    name: 'Bare',
-    blurb: 'Huge grotesk type on white. For couples who like it plain and modern.',
-    fonts: 'family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800',
-    swatch: ['#ffffff', '#000000', '#2a3cff', '#f3f3f1'],
-    themeColor: '#ffffff'
-  },
-  {
     id: 'botanical',
     name: 'Botanical',
     blurb: 'Sage, blush and an arched garden window. Soft and romantic.',
@@ -48,36 +40,4 @@ window.THEMES = [
     swatch: ['#eef1ea', '#4f6b45', '#e9c9bd', '#22301f'],
     themeColor: '#eef1ea'
   },
-  {
-    id: 'diyo',
-    name: 'Diyo',
-    blurb: 'A row of oil lamps glowing against a Tihar night. Evening and reception.',
-    fonts: 'family=Italiana&family=Jost:wght@400;500;600',
-    swatch: ['#0f1733', '#ffb547', '#f6ead2', '#2a3566'],
-    themeColor: '#0f1733'
-  },
-  {
-    id: 'kraft',
-    name: 'Kraft',
-    blurb: 'A letterpress card on kraft paper, stamped and posted. Formal and timeless.',
-    fonts: 'family=Abril+Fatface&family=Libre+Franklin:wght@400;500;600',
-    swatch: ['#cbb48e', '#1f2b5c', '#f7f5f0', '#c8323a'],
-    themeColor: '#cbb48e'
-  },
-  {
-    id: 'durbar',
-    name: 'Durbar',
-    blurb: 'A carved Newari window in brass and dark wood. Regal and heritage.',
-    fonts: 'family=Cormorant:ital,wght@0,500;0,600;1,500&family=Nunito+Sans:wght@400;600;700',
-    swatch: ['#22100c', '#c9a24a', '#5a2a1a', '#f1e4cc'],
-    themeColor: '#22100c'
-  },
-  {
-    id: 'cover',
-    name: 'Cover',
-    blurb: 'The two of you as a glossy magazine cover. Playful and editorial.',
-    fonts: 'family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;700;800',
-    swatch: ['#f3ecf7', '#7b3fa8', '#ffcfb8', '#2b1d33'],
-    themeColor: '#f3ecf7'
-  }
 ];
